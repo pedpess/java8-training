@@ -1,8 +1,6 @@
 package com;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -16,41 +14,42 @@ public class SortStrings {
         words.add("R2D2");
         words.add("Death Star");
 
-        Comparator<String> comparator = new ComparatorForSize();
+        //Comparator<String> comparator = new ComparatorForSize();
         //Collections.sort(words, comparator);
 
-        //Default method sort, concrete method into an interface (List)
-        words.sort(comparator);
-
-        System.out.println(words);
-
-        //Implements consumer natively
-        words.forEach(word -> {
-            System.out.println(word);
-        });
-
-        //Implementation of consumer
-        Consumer<String> consumer = new PrintLines();
-        words.forEach(consumer);
-    }
-
-    public static class ComparatorForSize implements Comparator<String> {
-
-        @Override
-        public int compare(String s1, String s2) {
+        //Default method sort, concrete method into an interface (List) now using lambda
+        words.sort((s1, s2) -> {
             if (s1.length() < s2.length())
                 return -1;
             if (s1.length() > s2.length())
                 return 1;
             return 0;
-        }
-    }
+        });
 
-    public static class PrintLines implements Consumer<String> {
+        //Enhanced lambda
+        words.sort((s1, s2) -> Integer.compare(s1.length(), s2.length()));
 
-        @Override
-        public void accept(String s) {
-            System.out.println(s);
-        }
+        System.out.println(words);
+
+        //Implementation of an anonymous class
+        Consumer<String> consumer = new Consumer<String>() {
+            @Override
+            public void accept(String s) {
+                System.out.println(s);
+            }
+        };
+
+        //Better approach of implementation
+        words.forEach(new Consumer<String>() {
+            @Override
+            public void accept(String s) {
+                System.out.println(s);
+            }
+        });
+
+        //Implements consumer natively with lambda
+        words.forEach(word -> {
+            System.out.println(word);
+        });
     }
 }
