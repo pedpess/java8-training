@@ -3,6 +3,8 @@ package com;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
@@ -26,6 +28,7 @@ class Course {
         return student;
     }
 }
+
 public class ExampleCourses {
     public static void main(String[] args) {
         List<Course> courses = new ArrayList<Course>();
@@ -46,7 +49,7 @@ public class ExampleCourses {
 //                .map(course -> course.getStudent())
 //                .forEach(total -> System.out.println(total));
 
-        //Or Method Reference
+                //Or Method Reference
 
                 .map(Course::getStudent)
                 .forEach(System.out::println);
@@ -59,6 +62,38 @@ public class ExampleCourses {
         int sum = sumStream.sum();
 
         System.out.println(sum);
+
+
+//        Optional<Course> courseOptional = courses.stream()
+//                .filter(c -> c.getStudent() >= 100)
+//                .findAny();
+//
+//        Course course = courseOptional.orElse(null);
+//        System.out.println(course.getName());
+
+        courses.stream()
+                .filter(course -> course.getStudent() >= 100)
+                .findAny()
+                .ifPresent(course -> System.out.println(course.getName()));
+
+//        courses.stream()
+//                .filter(course -> course.getStudent() >= 100)
+//                .collect(Collectors.toList());
+
+//        Map<String, Integer> map = courses.stream()
+//                .filter(c -> c.getStudent() >= 100)
+//                .collect(Collectors.toMap(
+//                        c -> c.getName(),
+//                        c -> c.getStudent()));
+//
+//        System.out.println(map);
+
+        courses.stream()
+                .filter(c -> c.getStudent() >= 100)
+                .collect(Collectors.toMap(
+                        c -> c.getName(),
+                        c -> c.getStudent()))
+                .forEach((name, student) -> System.out.println(name + " has " + student + " student"));
 
     }
 }
